@@ -54,7 +54,7 @@
     document.querySelector('.copy .cta').addEventListener('click', function (e) {
       if (navigator.share) {
         navigator.share({
-            title: document.title,
+            title: 'Is the title ignored!?',
             text: document.title,
             url: document.documentURI,
           })
