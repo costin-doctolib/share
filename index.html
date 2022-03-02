@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share API demo</title>
+  <style>
+    .copy {
+      display: block;
+      margin: 0 auto;
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      font-size: 14px;
+      line-height: 16px;
+      color: #107ACA;
+      cursor: pointer;
+    }
+
+    .done {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s linear 0.33s, opacity 0.33s linear;
+    }
+
+    .cta.show + .done {
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+    }
+
+    .copy svg {
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <button class="copy">
+    <svg width="12" height="14" fill="#107ACA" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M7.2 13.4a1.2 1.2 0 0 0 1.2-1.2V11h2a1.2 1.2 0 0 0 1.2-1.2V3.097c0-.275-.157-.655-.351-.849L9.952.951A1.379 1.379 0 0 0 9.103.6H4.8a1.2 1.2 0 0 0-1.2 1.2V3h-2A1.2 1.2 0 0 0 .4 4.2v8a1.2 1.2 0 0 0 1.2 1.2h5.6Zm3.05-3.6h-5.3a.15.15 0 0 1-.15-.15v-7.7a.15.15 0 0 1 .15-.15H7.6V4a.6.6 0 0 0 .6.6h2.2v5.05a.15.15 0 0 1-.15.15Zm.15-6.4H8.8V1.8h.241a.15.15 0 0 1 .106.044l1.21 1.209a.17.17 0 0 1 .037.068l.006.038v.24Zm-3.35 8.8h-5.3a.15.15 0 0 1-.15-.15v-7.7a.15.15 0 0 1 .15-.15H3.6v5.6A1.2 1.2 0 0 0 4.8 11h2.4v1.05a.15.15 0 0 1-.15.15Z"
+        fill="#107ACA" />
+    </svg>
+    <span class="cta">
+      Copy the article
+    </span>
+    <span class="done">&check;</span>
+  </button>
+
+  <script>
+    document.querySelector('.copy .cta').addEventListener('click', function (e) {
+      if (navigator.share) {
+        navigator.share({
+            title: document.title,
+            text: document.title,
+            url: document.documentURI,
+          })
+          .then(() => {
+            console.log('The share was done! The tracking was done too.')
+          })
+          .catch((error) => console.log(error));
+      } else {
+        copyToClipboard(e.target, document.documentURI);
+
+        setTimeout(function () {
+          e.target.classList.remove('show');
+        }, 1500);
+      }
+    });
+
+    function copyToClipboard(place = document.body, str = '') {
+      const el = document.createElement('textarea');
+      el.value = str;
+      place.appendChild(el);
+      place.classList.add('show');
+      el.style.cssText = `
+            padding: 0;
+            border: none;
+            outline: none;
+            box-shadow: none;
+        `;
+      el.focus();
+      el.select();
+      document.execCommand('copy');
+      place.removeChild(el);
+    }
+  </script>
+</body>
+
+</html>
