@@ -25,7 +25,7 @@
       transition: visibility 0s linear 0.33s, opacity 0.33s linear;
     }
 
-    .cta.show + .done {
+    .cta.show+.done {
       visibility: visible;
       opacity: 1;
       transition-delay: 0s;
@@ -61,32 +61,24 @@
           .then(() => {
             console.log('The share was done! The tracking was done too.')
           })
-          .catch((error) => console.log(error));
+          .catch((err) => console.error(err));
       } else {
-        copyToClipboard(e.target, document.documentURI);
+        if (navigator.clipboard?.writeText) {
+          e.target.classList.add('show');
 
-        setTimeout(function () {
-          e.target.classList.remove('show');
-        }, 1500);
+          navigator.clipboard
+            .writeText(document.documentURI)
+            .then(() => {
+              setTimeout(function () {
+                e.target.classList.remove('show');
+              }, 1500);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
       }
     });
-
-    function copyToClipboard(place = document.body, str = '') {
-      const el = document.createElement('textarea');
-      el.value = str;
-      place.appendChild(el);
-      place.classList.add('show');
-      el.style.cssText = `
-            padding: 0;
-            border: none;
-            outline: none;
-            box-shadow: none;
-        `;
-      el.focus();
-      el.select();
-      document.execCommand('copy');
-      place.removeChild(el);
-    }
   </script>
 </body>
 
