@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Share API demo</title>
+  <script src="https://raw.githubusercontent.com/barisaydinoglu/Detectizr/master/dist/detectizr.min.js"></script>
   <style>
     .copy {
       display: block;
@@ -52,6 +53,12 @@
 
   <script>
     document.querySelector('.copy .cta').addEventListener('click', function (e) {
+      alert(JSON.stringify({
+        device: Detectizr.device,
+        os: Detectizr.os,
+        userAgent: navigator.userAgent
+      }, null, '\t'));
+      
       if (navigator.share) {
         navigator.share({
             title: 'Is the title ignored!?',
